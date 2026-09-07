@@ -728,8 +728,9 @@ ul { list-style: none; }
 
   .profile-photo {
     max-width: 220px;
-    /* aspect-ratio: 1 / 1;
-    object-fit: cover;     /* crops to fill the square instead of distorting */
+    /* Square crop disabled - the photo keeps its natural aspect ratio.
+       aspect-ratio: 1 / 1;
+       object-fit: cover; */
   }
 
   .hero-bio h1 { font-size: 1.4rem; }
