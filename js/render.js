@@ -116,10 +116,11 @@ export function renderPublicationsHTML(publications, profile) {
   const selfName = profile && profile.name;
   return publications.map((pub, i) => `
     <div class="pub-card">
+      <div class="pub-index">${String(i + 1).padStart(2, '0')}</div>
       ${pub.image
         ? `<div class="pub-thumb"><img src="${esc(pub.image)}"
              alt="${esc(pub.imageAlt || pub.title)}" loading="lazy" /></div>`
-        : `<div class="pub-index">${String(i + 1).padStart(2, '0')}</div>`}
+        : ''}
       <div class="pub-content">
         <h3 class="pub-title">${esc(pub.title)}</h3>
         ${renderAuthors(pub.authors, selfName)}

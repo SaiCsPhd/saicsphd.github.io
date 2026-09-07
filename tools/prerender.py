@@ -162,14 +162,14 @@ def render_publications(publications, profile):
     out = []
     for i, pub in enumerate(publications, start=1):
         year = f'<span class="pub-year">({esc(pub["year"])})</span>' if pub.get('year') else ''
+        thumb = ''
         if pub.get('image'):
-            lead = (f'<div class="pub-thumb"><img src="{esc(pub["image"])}"\n'
-                    f'             alt="{esc(pub.get("imageAlt") or pub["title"])}" loading="lazy" /></div>')
-        else:
-            lead = f'<div class="pub-index">{i:02d}</div>'
+            thumb = (f'<div class="pub-thumb"><img src="{esc(pub["image"])}"\n'
+                     f'             alt="{esc(pub.get("imageAlt") or pub["title"])}" loading="lazy" /></div>')
         out.append(f'''
     <div class="pub-card">
-      {lead}
+      <div class="pub-index">{i:02d}</div>
+      {thumb}
       <div class="pub-content">
         <h3 class="pub-title">{esc(pub["title"])}</h3>
         {render_authors(pub.get("authors"), self_name)}
