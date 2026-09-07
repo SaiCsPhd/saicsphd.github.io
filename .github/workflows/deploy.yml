@@ -1,0 +1,63 @@
+name: Build and deploy site
+
+# Runs on every push to main — including edits made in GitHub's web editor —
+# and can also be started by hand from the Actions tab.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Least privilege: read the repo, publish to Pages. No write access to the code.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# If two pushes land close together, let the newer one win rather than
+# deploying them out of order.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # tools/prerender.py is standard library only — nothing to install.
+      - name: Prerender pages
+        run: python3 tools/prerender.py --out dist
+
+      # Catch a broken build before it reaches the live site.
+      - name: Verify the pages have content
+        run: |
+          for f in index.html publications.html education.html projects.html \
+                   experience.html skills.html certifications.html; do
+            test -s "dist/$f" || { echo "::error::dist/$f missing or empty"; exit 1; }
+          done
+          grep -q 'pub-title' dist/publications.html \
+            || { echo "::error::no publications rendered into dist/publications.html"; exit 1; }
+          test -f dist/.nojekyll || { echo "::error::dist/.nojekyll missing"; exit 1; }
+          echo "dist/ looks good:"
+          ls -la dist
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

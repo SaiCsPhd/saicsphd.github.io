@@ -68,9 +68,13 @@ def tags(items):
 # ── section renderers ────────────────────────────────────────────────────────
 
 def render_nav(active):
-    return ''.join(
-        f'\n    <li><a href="{href}" {"class=\"active\"" if label == active else ""}>{label}</a></li>\n  '
-        for href, label in NAV)
+    # The class attribute is built outside the f-string: a backslash inside an
+    # f-string expression only parses on Python 3.12+.
+    parts = []
+    for href, label in NAV:
+        cls = 'class="active"' if label == active else ''
+        parts.append(f'\n    <li><a href="{href}" {cls}>{label}</a></li>\n  ')
+    return ''.join(parts)
 
 
 def render_footer(profile, year):
