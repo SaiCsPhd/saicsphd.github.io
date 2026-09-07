@@ -120,11 +120,24 @@ def render_timeline(items):
 def pub_link_meta(label):
     """Same label → icon mapping as pubLinkMeta() in js/render.js."""
     l = str(label).lower()
-    if re.search(r'paper|pdf|doi|arxiv|publication', l):
+    if re.search(r'\bdoi\b', l):
+        return 'fas fa-link', False
+    if re.search(r'paper|pdf|arxiv|publication', l):
         return 'fas fa-file-lines', True
     if re.search(r'code|github|repo|source', l):
         return 'fab fa-github', False
     return 'fas fa-arrow-up-right-from-square', False
+
+
+def render_authors(authors, self_name):
+    """Same byline as renderAuthors() in js/render.js."""
+    if not authors:
+        return ''
+    key = lambda s: re.sub(r'[^a-z]', '', str(s).lower())
+    me = key(self_name or '')
+    names = [f'<span class="pub-author-self">{esc(a)}</span>' if me and key(a) == me
+             else esc(a) for a in authors]
+    return f'<p class="pub-authors">{", ".join(names)}</p>'
 
 
 def render_pub_links(links):
@@ -144,24 +157,27 @@ def render_pub_links(links):
           </div>'''
 
 
-def render_publications(publications):
+def render_publications(publications, profile):
+    self_name = profile.get('name') if profile else None
     out = []
     for i, pub in enumerate(publications, start=1):
         year = f'<span class="pub-year">({esc(pub["year"])})</span>' if pub.get('year') else ''
-        desc = f'<p class="pub-desc">{pub["description"]}</p>' if pub.get('description') else ''
-        tag_row = f'<div class="tag-row">{tags(pub["tags"])}</div>' if pub.get('tags') else ''
+        if pub.get('image'):
+            lead = (f'<div class="pub-thumb"><img src="{esc(pub["image"])}"\n'
+                    f'             alt="{esc(pub.get("imageAlt") or pub["title"])}" loading="lazy" /></div>')
+        else:
+            lead = f'<div class="pub-index">{i:02d}</div>'
         out.append(f'''
     <div class="pub-card">
-      <div class="pub-index">{i:02d}</div>
+      {lead}
       <div class="pub-content">
         <h3 class="pub-title">{esc(pub["title"])}</h3>
+        {render_authors(pub.get("authors"), self_name)}
         <p class="pub-venue">
           <i class="fas fa-university"></i>
           <span>{esc(pub["venueFullName"])} &mdash; <em>{esc(pub["venue"])}</em>
           {year}</span>
         </p>
-        {desc}
-        {tag_row}
         {render_pub_links(pub.get("links"))}
       </div>
     </div>
@@ -272,7 +288,7 @@ def build(out_dir, year):
         'education.html': ('Education', lambda p: (
             fill(p, 'education-list', render_timeline(data['education'])),)),
         'publications.html': ('Publications', lambda p: (
-            fill(p, 'publications-list', render_publications(data['publications'])),)),
+            fill(p, 'publications-list', render_publications(data['publications'], profile)),)),
         'projects.html': ('Projects', lambda p: (
             fill(p, 'projects-list', render_projects(data['projects'])),)),
         'experience.html': ('Experience', lambda p: (

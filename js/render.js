@@ -93,26 +93,41 @@ export function renderNewsHTML(news) {
 }
 
 // Maps a link label to an icon + button style. "Paper" is the primary action.
+// DOI is checked first: it would otherwise fall into the paper branch below.
 function pubLinkMeta(label) {
   const l = String(label).toLowerCase();
-  if (/paper|pdf|doi|arxiv|publication/.test(l))  return { icon: 'fas fa-file-lines',  primary: true  };
+  if (/\bdoi\b/.test(l))                          return { icon: 'fas fa-link',        primary: false };
+  if (/paper|pdf|arxiv|publication/.test(l))      return { icon: 'fas fa-file-lines',  primary: true  };
   if (/code|github|repo|source/.test(l))          return { icon: 'fab fa-github',      primary: false };
   return { icon: 'fas fa-arrow-up-right-from-square', primary: false };
 }
 
-export function renderPublicationsHTML(publications) {
+// Author byline. The site owner's own name is emphasised wherever it appears.
+function renderAuthors(authors, selfName) {
+  if (!authors || !authors.length) return '';
+  const key = s => String(s).toLowerCase().replace(/[^a-z]/g, '');
+  const self = key(selfName || '');
+  const names = authors.map(a =>
+    self && key(a) === self ? `<span class="pub-author-self">${esc(a)}</span>` : esc(a));
+  return `<p class="pub-authors">${names.join(', ')}</p>`;
+}
+
+export function renderPublicationsHTML(publications, profile) {
+  const selfName = profile && profile.name;
   return publications.map((pub, i) => `
     <div class="pub-card">
-      <div class="pub-index">${String(i + 1).padStart(2, '0')}</div>
+      ${pub.image
+        ? `<div class="pub-thumb"><img src="${esc(pub.image)}"
+             alt="${esc(pub.imageAlt || pub.title)}" loading="lazy" /></div>`
+        : `<div class="pub-index">${String(i + 1).padStart(2, '0')}</div>`}
       <div class="pub-content">
         <h3 class="pub-title">${esc(pub.title)}</h3>
+        ${renderAuthors(pub.authors, selfName)}
         <p class="pub-venue">
           <i class="fas fa-university"></i>
           <span>${esc(pub.venueFullName)} &mdash; <em>${esc(pub.venue)}</em>
           ${pub.year ? `<span class="pub-year">(${esc(pub.year)})</span>` : ''}</span>
         </p>
-        <p class="pub-desc">${pub.description}</p>
-        <div class="tag-row">${tags(pub.tags)}</div>
         ${pub.links && pub.links.length ? `
           <div class="pub-links">
             ${pub.links.map(l => {

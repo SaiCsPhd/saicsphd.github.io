@@ -48,21 +48,34 @@ stale.
 ```js
 {
   title:        'Paper Title Here',
+  image:        'images/pubs/teaser.png',                          // optional
+  authors:      ['Saikat Mondal', 'Co Author', 'Third Author'],
   venue:        'EMNLP 2026',
   venueFullName:'Conference on Empirical Methods in Natural Language Processing',
   year:         '2026',
-  description:  'One paragraph. <strong>HTML allowed.</strong>',   // optional
-  tags:         ['NLP', 'LLM Safety'],                             // optional
   links: [
     { label: 'Paper', url: 'https://...' },
     { label: 'Code',  url: 'https://...' },
+    { label: 'DOI',   url: 'https://doi.org/...' },
   ],
 },
 ```
 
-`description`, `tags`, `year` and `links` are all optional — leave any of them
-out and that part simply isn't rendered. Link labels choose their own icon:
-*Paper/PDF/DOI/arXiv* get a document icon, *Code/GitHub/repo* the GitHub mark,
+A card shows the teaser figure, the title, the author byline, the venue and
+year, and the link buttons — in that order.
+
+`image`, `authors`, `year` and `links` are all optional; leave any of them out
+and that part simply isn't rendered. Put teaser figures in `images/pubs/` —
+they're scaled to a 190px-wide column, so anything from square to 2:1 landscape
+sits well beside the text. Without one the card falls back to the old `01` /
+`02` index number in the same slot.
+
+Authors are listed verbatim, in order, separated by commas. Any entry matching
+the `name` in `profile.js` is bolded and underlined automatically, so there's
+nothing to mark up by hand.
+
+Link labels choose their own icon: *DOI* gets a link icon, *Paper/PDF/arXiv* a
+document icon and the filled primary button, *Code/GitHub/repo* the GitHub mark,
 anything else an external-link arrow.
 
 ## Why prerendered

@@ -5,6 +5,6 @@ import { renderNav, renderFooter, setPageTitle, mount, renderPublicationsHTML } 
 document.addEventListener('DOMContentLoaded', () => {
   setPageTitle(profile, 'Publications');
   renderNav(profile, 'Publications');
-  mount('publications-list', renderPublicationsHTML(publications));
+  mount('publications-list', renderPublicationsHTML(publications, profile));
   renderFooter(profile);
 });

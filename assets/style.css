@@ -469,7 +469,37 @@ ul { list-style: none; }
   flex-shrink: 0;
 }
 
-.pub-content { flex: 1; }
+/* Teaser figure — takes the index number's slot when a publication has one */
+.pub-thumb {
+  width: 190px;
+  flex-shrink: 0;
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fff;
+  align-self: flex-start;
+}
+
+.pub-thumb img { display: block; width: 100%; height: auto; }
+
+.pub-content { flex: 1; min-width: 0; }
+
+/* Author byline — the site owner's own name is emphasised */
+.pub-authors {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin-bottom: 6px;
+}
+
+.pub-author-self {
+  font-weight: 600;
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
 
 .pub-title {
   font-family: var(--font-serif);
@@ -747,8 +777,9 @@ ul { list-style: none; }
   }
   .timeline-meta::after { right: auto; left: -5px; }
 
-  .pub-card { flex-direction: column; gap: 6px; }
+  .pub-card { flex-direction: column; gap: 12px; }
   .pub-index { font-size: 1rem; }
+  .pub-thumb { width: 100%; max-width: 320px; }
 
   .project-header { flex-direction: column; gap: 4px; }
 
