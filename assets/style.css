@@ -743,6 +743,11 @@ a.pub-thumb:hover {
   .hero { padding: 32px 0 52px; }
   .hero-inner { padding: 0 24px; gap: 36px; }
   .main-content { padding: 0 24px 64px; }
+
+  /* Give the text column back the room the full-size plate was taking */
+  .pub-card { gap: 14px; }
+  .pub-thumb { width: 150px; padding: 8px; }
+  .pub-index { min-width: 22px; }
 }
 
 /* ════════════════════════════════════════
@@ -805,9 +810,20 @@ a.pub-thumb:hover {
   }
   .timeline-meta::after { right: auto; left: -5px; }
 
-  .pub-card { flex-direction: column; gap: 12px; }
-  .pub-index { font-size: 1rem; }
-  .pub-thumb { width: 100%; max-width: 340px; }
+  /* Figure leads, then the number and text share a row — a stacked column
+     would strand the "01" alone on a line of its own. */
+  .pub-card { flex-wrap: wrap; gap: 12px 14px; }
+  .pub-thumb {
+    order: 0;
+    flex: 0 0 100%;   /* a clamped basis would let the index share this line */
+    max-width: none;
+    padding: 8px;
+  }
+  .pub-index { order: 1; font-size: 1rem; min-width: 20px; padding-top: 2px; }
+  .pub-content { order: 2; flex: 1 1 0; }
+  .pub-title { font-size: 0.95rem; }
+  .pub-authors { font-size: 0.8rem; }
+  .pub-links { gap: 8px; }
 
   .project-header { flex-direction: column; gap: 4px; }
 
@@ -819,4 +835,7 @@ a.pub-thumb:hover {
   .main-content { padding: 0 16px 40px; }
   .hero-inner { padding: 0 16px; }
   .hero-links { gap: 8px 14px; }
+
+  .pub-card { gap: 10px 12px; }
+  .pub-links .pub-link { font-size: 0.72rem; padding: 3px 9px; }
 }
