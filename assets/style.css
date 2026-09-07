@@ -525,14 +525,14 @@ ul { list-style: none; }
   transition: all 0.18s;
 }
 
-.pub-links .pub-link i { font-size: 0.8rem; color: var(--text-primary); }
+.pub-links .pub-link i { font-size: 0.8rem; color: var(--text-muted); }
 
 /* Outlined at rest — Paper and Code share the same treatment */
 .pub-links .pub-link-primary,
 .pub-links .pub-link-secondary {
   background: transparent;
   border-color: var(--text-primary);
-  color: var(--text-primary);
+  color: var(--text-secondary);
 }
 
 /* Hover — same warm tan as the profile page's email / LinkedIn / GitHub buttons */
@@ -728,7 +728,7 @@ ul { list-style: none; }
 
   .profile-photo {
     max-width: 220px;
-    aspect-ratio: 1 / 1;
+    /* aspect-ratio: 1 / 1;
     object-fit: cover;     /* crops to fill the square instead of distorting */
   }
 

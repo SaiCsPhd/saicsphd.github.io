@@ -111,8 +111,8 @@ export function renderPublicationsHTML(publications) {
           <span>${esc(pub.venueFullName)} &mdash; <em>${esc(pub.venue)}</em>
           ${pub.year ? `<span class="pub-year">(${esc(pub.year)})</span>` : ''}</span>
         </p>
-        ${pub.description ? `<p class="pub-desc">${pub.description}</p>` : ''}
-        ${pub.tags && pub.tags.length ? `<div class="tag-row">${tags(pub.tags)}</div>` : ''}
+        <p class="pub-desc">${pub.description}</p>
+        <div class="tag-row">${tags(pub.tags)}</div>
         ${pub.links && pub.links.length ? `
           <div class="pub-links">
             ${pub.links.map(l => {
