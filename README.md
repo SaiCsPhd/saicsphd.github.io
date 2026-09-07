@@ -67,11 +67,26 @@ year, and the link buttons — in that order.
 `image`, `authors`, `year` and `links` are all optional; leave any of them out
 and that part simply isn't rendered.
 
-Put teaser figures in `images/pubs/`. They render into a fixed 200px 4:3 plate
-and are *contained*, never cropped, so any aspect ratio is safe — the column
-stays even however the source figures are proportioned. Roughly 480px wide is
-plenty (the plate is 200 CSS px, so that covers retina); shrink anything larger
-before committing it. Cards without a figure just show the index number.
+Teaser figures live in `images/pubs/` and render into a fixed 200px 4:3 plate
+(a 150px band on phones). They're *contained*, never cropped, so any aspect
+ratio is safe and the column stays even however the sources are proportioned.
+Cards without a figure just show the index number.
+
+Prepare one with:
+
+```bash
+python3 tools/teaser.py path/to/figure.png indicsafeeval
+python3 tools/teaser.py path/to/figure.png mcstcnn --crop 420x220+55+30
+```
+
+That scales to fit the plate at retina density and palette-quantises the result
+— usually an 80–85% size cut with nothing visible lost at the size it renders —
+then prints the two lines to paste into `data/publications.js`. Needs `ffmpeg`;
+everything else in `tools/` is standard library only.
+
+**Crop first.** The plate is 200px wide. A whole multi-panel figure is texture
+at that size, not information — pick the one panel that carries the idea and
+crop to it. `--crop` takes `WxH+X+Y` in source pixels and runs before scaling.
 
 Authors are listed verbatim, in order, separated by commas. Any entry matching
 the `name` in `profile.js` is bolded and underlined automatically, so there's

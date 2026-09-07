@@ -817,6 +817,10 @@ a.pub-thumb:hover {
     order: 0;
     flex: 0 0 100%;   /* a clamped basis would let the index share this line */
     max-width: none;
+    /* Height-driven instead of ratio-driven: a full-width 4:3 plate runs ~270px
+       tall on a phone and buries the title. The figure is centred in the band. */
+    aspect-ratio: auto;
+    height: 150px;
     padding: 8px;
   }
   .pub-index { order: 1; font-size: 1rem; min-width: 20px; padding-top: 2px; }
@@ -837,5 +841,6 @@ a.pub-thumb:hover {
   .hero-links { gap: 8px 14px; }
 
   .pub-card { gap: 10px 12px; }
+  .pub-thumb { height: 130px; }
   .pub-links .pub-link { font-size: 0.72rem; padding: 3px 9px; }
 }
