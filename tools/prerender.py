@@ -129,6 +129,20 @@ def pub_link_meta(label):
     return 'fas fa-arrow-up-right-from-square', False
 
 
+def pub_thumb(pub):
+    """Same figure markup as pubThumb() in js/render.js."""
+    if not pub.get('image'):
+        return ''
+    paper = next((l for l in pub.get('links') or []
+                  if re.search(r'paper|pdf|arxiv|doi', l['label'], re.I)), None)
+    img = (f'<img src="{esc(pub["image"])}"\n'
+           f'             alt="{esc(pub.get("imageAlt") or pub["title"])}" loading="lazy" />')
+    if paper:
+        return (f'<a class="pub-thumb" href="{esc(paper["url"])}" target="_blank" rel="noopener"\n'
+                f'             aria-label="{esc(pub["title"])}">{img}</a>')
+    return f'<div class="pub-thumb">{img}</div>'
+
+
 def render_authors(authors, self_name):
     """Same byline as renderAuthors() in js/render.js."""
     if not authors:
@@ -162,10 +176,7 @@ def render_publications(publications, profile):
     out = []
     for i, pub in enumerate(publications, start=1):
         year = f'<span class="pub-year">({esc(pub["year"])})</span>' if pub.get('year') else ''
-        thumb = ''
-        if pub.get('image'):
-            thumb = (f'<div class="pub-thumb"><img src="{esc(pub["image"])}"\n'
-                     f'             alt="{esc(pub.get("imageAlt") or pub["title"])}" loading="lazy" /></div>')
+        thumb = pub_thumb(pub)
         out.append(f'''
     <div class="pub-card">
       <div class="pub-index">{i:02d}</div>

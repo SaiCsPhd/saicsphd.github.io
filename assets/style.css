@@ -469,18 +469,36 @@ ul { list-style: none; }
   flex-shrink: 0;
 }
 
-/* Teaser figure — takes the index number's slot when a publication has one */
+/* Teaser figure — a fixed plate so the column stays even however the
+   source figures are proportioned. The figure is contained, never cropped. */
 .pub-thumb {
-  width: 190px;
+  width: 200px;
+  aspect-ratio: 4 / 3;
   flex-shrink: 0;
-  border: 1px solid var(--border-light);
-  border-radius: 4px;
-  overflow: hidden;
-  background: #fff;
   align-self: flex-start;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: box-shadow 0.18s, transform 0.18s;
 }
 
-.pub-thumb img { display: block; width: 100%; height: auto; }
+.pub-thumb img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Only the linked variant reacts to the pointer */
+a.pub-thumb:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.10);
+}
 
 .pub-content { flex: 1; min-width: 0; }
 
@@ -779,7 +797,7 @@ ul { list-style: none; }
 
   .pub-card { flex-direction: column; gap: 12px; }
   .pub-index { font-size: 1rem; }
-  .pub-thumb { width: 100%; max-width: 320px; }
+  .pub-thumb { width: 100%; max-width: 340px; }
 
   .project-header { flex-direction: column; gap: 4px; }
 

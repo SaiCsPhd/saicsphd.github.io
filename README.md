@@ -65,10 +65,13 @@ A card shows the teaser figure, the title, the author byline, the venue and
 year, and the link buttons — in that order.
 
 `image`, `authors`, `year` and `links` are all optional; leave any of them out
-and that part simply isn't rendered. Put teaser figures in `images/pubs/` —
-they're scaled to a 190px-wide column, so anything from square to 2:1 landscape
-sits well beside the text. Without one the card falls back to the old `01` /
-`02` index number in the same slot.
+and that part simply isn't rendered.
+
+Put teaser figures in `images/pubs/`. They render into a fixed 200px 4:3 plate
+and are *contained*, never cropped, so any aspect ratio is safe — the column
+stays even however the source figures are proportioned. Roughly 480px wide is
+plenty (the plate is 200 CSS px, so that covers retina); shrink anything larger
+before committing it. Cards without a figure just show the index number.
 
 Authors are listed verbatim, in order, separated by commas. Any entry matching
 the `name` in `profile.js` is bolded and underlined automatically, so there's

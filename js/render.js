@@ -102,6 +102,18 @@ function pubLinkMeta(label) {
   return { icon: 'fas fa-arrow-up-right-from-square', primary: false };
 }
 
+// The teaser figure links through to the paper when there is one to link to.
+function pubThumb(pub) {
+  if (!pub.image) return '';
+  const paper = (pub.links || []).find(l => /paper|pdf|arxiv|doi/i.test(l.label));
+  const img = `<img src="${esc(pub.image)}"
+             alt="${esc(pub.imageAlt || pub.title)}" loading="lazy" />`;
+  return paper
+    ? `<a class="pub-thumb" href="${esc(paper.url)}" target="_blank" rel="noopener"
+             aria-label="${esc(pub.title)}">${img}</a>`
+    : `<div class="pub-thumb">${img}</div>`;
+}
+
 // Author byline. The site owner's own name is emphasised wherever it appears.
 function renderAuthors(authors, selfName) {
   if (!authors || !authors.length) return '';
@@ -117,10 +129,7 @@ export function renderPublicationsHTML(publications, profile) {
   return publications.map((pub, i) => `
     <div class="pub-card">
       <div class="pub-index">${String(i + 1).padStart(2, '0')}</div>
-      ${pub.image
-        ? `<div class="pub-thumb"><img src="${esc(pub.image)}"
-             alt="${esc(pub.imageAlt || pub.title)}" loading="lazy" /></div>`
-        : ''}
+      ${pubThumb(pub)}
       <div class="pub-content">
         <h3 class="pub-title">${esc(pub.title)}</h3>
         ${renderAuthors(pub.authors, selfName)}
